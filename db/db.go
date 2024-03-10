@@ -12,7 +12,7 @@ type Task struct {
 }
 
 func InitDB(filePath string) *sql.DB {
-	db, err := sql.Open("sqlite3", filepath)
+	db, err := sql.Open("sqlite3", filePath)
 	if err != nil {
 		panic(err)
 	}
@@ -63,4 +63,18 @@ func GetAllTasks(db *sql.DB) []Task {
 	}
 
 	return tasks
+}
+
+func UpdateTask(db *sql.DB, id int, description string, completed bool) {
+	_, err := db.Exec("UPDATE tasks SET description = ?, completed = ? WHERE id = ?", description, completed, id)
+	if err != nil {
+		panic(err)
+	}
+}
+
+func DeleteTask(db *sql.DB, id string) {
+	_, err := db.Exec("DELETE FROM tasks WHERE id = ?", id)
+	if err != nil {
+		panic(err)
+	}
 }
